@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+    app:
+        build:
+            context: .
+            dockerfile: ./docker/dev/php/Dockerfile
+        volumes:
+            - ./:/app
+            - ./docker/dev/php/auth.json:/root/.composer/auth.json
+        ports:
+            - 80:80
+    db:
+        image: mysql:8
+        command: --default-authentication-plugin=mysql_native_password
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: customer
+        ports:
+            - 3306:3306
+        volumes:
+            - dbdata:/var/lib/mysql
+volumes:
+    dbdata:
+        driver: local
